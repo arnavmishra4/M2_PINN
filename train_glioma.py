@@ -38,7 +38,7 @@ try:
     import tensorflow_probability as tfp
     from config   import DTYPE
     from DataSet  import DataSet
-    from options  import Options, str_from_dict   # str_from_dict may not exist
+    from options  import Options
     from glioma   import Gmodel
 except ImportError as e:
     raise ImportError(
