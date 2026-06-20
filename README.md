@@ -211,12 +211,11 @@ m2_pinn/
 - *NeuroSight System Master Architecture and Build Documentation*, 2025 (`NeuroSight_Pleiades.docx`)
 
 ---
-
 <div align="center">
 
 **NeuroSight Pipeline**
 
-[M1 — 3D Res-U-Net](../m1_segmentation) · **M2 — Fisher-KPP PINN (this repo)** · [M3 — Progression Classifier](../m3_classifier) · [M4 — Clinical RAG](../m4_rag) · [M5 — cfDNA Classifier](../m5_cfdna)
+[M1 — 3D Res-U-Net](https://github.com/arnavmishra4/M1-Segmentation) · **M2 — Fisher-KPP PINN (this repo)** · [M3 — Progression Classifier](https://github.com/arnavmishra4/M3-Classifier-) · [M4 — Clinical RAG](https://github.com/arnavmishra4/M4-Report-LLM-RAG-) · [M5 — cfDNA Classifier](https://github.com/arnavmishra4/M5-CfDNA)
 
 *Orchestrated by the NeuroBio Agent*
 
