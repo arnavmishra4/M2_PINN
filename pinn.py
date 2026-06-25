@@ -188,7 +188,7 @@ class PINNSolver():
             # This tape is for derivatives with
             # respect to trainable variables
             # tape.watch(self.model.trainable_variables)
-            tape.watch(glob_trainable_variablestape.watch([v.value if hasattr(v, 'value') else v for v in glob_trainable_variables]))
+            tape.watch([v.value if hasattr(v, 'value') else v for v in glob_trainable_variables])
             loss = self.losses.getloss()
         
         tv = [v.value if hasattr(v, 'value') else v for v in glob_trainable_variables]
