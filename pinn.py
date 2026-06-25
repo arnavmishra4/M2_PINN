@@ -188,10 +188,11 @@ class PINNSolver():
             # This tape is for derivatives with
             # respect to trainable variables
             # tape.watch(self.model.trainable_variables)
-            tape.watch(glob_trainable_variables)
+            tape.watch(glob_trainable_variablestape.watch([v.value if hasattr(v, 'value') else v for v in glob_trainable_variables]))
             loss = self.losses.getloss()
         
-        g = tape.gradient(loss['total'], glob_trainable_variables)
+        tv = [v.value if hasattr(v, 'value') else v for v in glob_trainable_variables]
+        g = tape.gradient(loss['total'], tv)
         grad_stat = {}
         grad_by_loss = {}
         if self.losses.weighting.method in {"grad","invd"}:
