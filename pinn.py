@@ -188,14 +188,21 @@ class PINNSolver():
         !if use tf.function, the weight will be fixed to the initial value
         """
         self.losses.trainmode()
+    
+        def _unwrap(v):
+            if hasattr(v, 'value'):
+                val = v.value
+                return val() if callable(val) else val
+            return v
+    
         with tf.GradientTape(persistent=True, watch_accessed_variables=True) as tape:
             # This tape is for derivatives with
             # respect to trainable variables
-            # tape.watch(self.model.trainable_variables)
-            tape.watch(glob_trainable_variables)
+            watched = [_unwrap(v) for v in glob_trainable_variables]
+            tape.watch(watched)
             loss = self.losses.getloss()
         
-        tv = glob_trainable_variables
+        tv = [_unwrap(v) for v in glob_trainable_variables]
         g = tape.gradient(loss['total'], tv)
         grad_stat = {}
         grad_by_loss = {}
