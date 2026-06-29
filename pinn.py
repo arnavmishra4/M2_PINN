@@ -170,6 +170,10 @@ class PINNSolver():
         global glob_trainable_variables
         glob_trainable_variables = []  # reset each time
         glob_trainable_variables += self.model.trainable_variables
+        if self.model.param is not None:
+            for pname, ptensor in self.model.param.items():
+                if ptensor.trainable:
+                    glob_trainable_variables.append(ptensor)
         if self.geomodel is not None:
             _ = self.geomodel(tf.zeros([1, self.geomodel.input_dim], dtype=tf.float32))
             self.geomodel.summary()
