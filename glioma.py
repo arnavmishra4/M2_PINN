@@ -51,6 +51,7 @@ class PDE:
         return {'residual':residual, 'proliferation': proliferation, 'diffusion': diffusion, 'phiut':phi * u_t}
 
     def pde3d(self, x_r, phi, P, DxPphi, DyPphi, DzPphi):
+        x_r = tf.cast(tf.convert_to_tensor(x_r), dtype=DTYPE)
         t = x_r[:,0:1]
         x = x_r[:,1:2]
         y = x_r[:,2:3]
@@ -60,10 +61,10 @@ class PDE:
         with tf.GradientTape(persistent=True) as tape2:
             tape2.watch([t, x, y, z])
             u = self.nn(xr)
+            u_t = tape2.gradient(u, t)
             u_x = tape2.gradient(u, x)
             u_y = tape2.gradient(u, y)
             u_z = tape2.gradient(u, z)
-            u_t = tape2.gradient(u, t)
     
         u_xx = tape2.gradient(u_x, x)
         u_yy = tape2.gradient(u_y, y)
