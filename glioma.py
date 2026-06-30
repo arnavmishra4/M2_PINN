@@ -28,8 +28,6 @@ class PDE:
         self.param = param
     
 
-    
-    @tf.function
     def pde2d(self, xr, phi, P, DxPphi, DyPphi):
         t = xr[:,0:1]
         x = xr[:,1:2]
@@ -51,8 +49,7 @@ class PDE:
         diffusion = self.param['rD'] * self.dataset.DW * (P *phi * (u_xx + u_yy) + self.dataset.L* DxPphi * u_x + self.dataset.L* DyPphi * u_y)
         residual = phi * u_t - ( diffusion +  proliferation)
         return {'residual':residual, 'proliferation': proliferation, 'diffusion': diffusion, 'phiut':phi * u_t}
-    
-    @tf.function
+
     def pde3d(self, x_r, phi, P, DxPphi, DyPphi, DzPphi):
         t = x_r[:,0:1]
         x = x_r[:,1:2]
@@ -82,8 +79,7 @@ class PDE:
         return {'residual':residual, 'proliferation': proliferation, 'diffusion': diffusion, 'phiut':phi * u_t}
 
     
-    # geometry is represented by neural net
-    @tf.function
+
     def pde2dgeo(self, xr):
         t = xr[:,0:1]
         x = xr[:,1:2]
@@ -110,8 +106,7 @@ class PDE:
         diffusion =  self.dataset.DW * (u_xx + u_yy)
         residual = phi * u_t - ( self.param['rD'] * diffusion +  self.param['rRHO']* proliferation)
         return {'residual':residual, 'proliferation': proliferation, 'diffusion': diffusion, 'phiut':phi * u_t}    
-    
-    @tf.function
+
     def pde3dgeo(self, xr):
         t = xr[:,0:1]
         x = xr[:,1:2]
