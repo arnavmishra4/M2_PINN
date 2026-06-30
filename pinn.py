@@ -162,7 +162,7 @@ class PINNSolver():
         self.model.set_trainable_layer(self.options.get('trainnnweight'))
         
         # Force-build so trainable_variables are registered (Keras 3)
-        _ = self.model(tf.zeros([1, self.model.input_dim], dtype=tf.float32))
+        assert len(self.model.trainable_variables) > 0, 
         
         self.model.summary()
         
