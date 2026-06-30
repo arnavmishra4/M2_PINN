@@ -58,18 +58,20 @@ class PDE:
         z = x_r[:,3:4]
         xr = tf.concat([t,x,y,z], axis=1)
     
-        with tf.GradientTape(persistent=True) as tape2:
-            tape2.watch([t, x, y, z])
-            u = self.nn(xr)
-            u_t = tape2.gradient(u, t)
-            u_x = tape2.gradient(u, x)
-            u_y = tape2.gradient(u, y)
-            u_z = tape2.gradient(u, z)
+        with tf.GradientTape(persistent=True) as tape_outer:
+            tape_outer.watch([t, x, y, z])
+            with tf.GradientTape(persistent=True) as tape_inner:
+                tape_inner.watch([t, x, y, z])
+                u = self.nn(xr)
+            u_t = tape_inner.gradient(u, t)
+            u_x = tape_inner.gradient(u, x)
+            u_y = tape_inner.gradient(u, y)
+            u_z = tape_inner.gradient(u, z)
     
-        u_xx = tape2.gradient(u_x, x)
-        u_yy = tape2.gradient(u_y, y)
-        u_zz = tape2.gradient(u_z, z)
-        del tape2
+        u_xx = tape_outer.gradient(u_x, x)
+        u_yy = tape_outer.gradient(u_y, y)
+        u_zz = tape_outer.gradient(u_z, z)
+        del tape_inner, tape_outer
     
         proliferation = self.param['rRHO'] * self.dataset.RHO * phi * u * (1 - u/self.param['M'])
         diffusion = self.param['rD'] * self.dataset.DW * (P * phi * (u_xx + u_yy + u_zz) +
@@ -78,8 +80,7 @@ class PDE:
                                                             self.dataset.L * DzPphi * u_z)
         residual = phi * u_t - (diffusion + proliferation)
         return {'residual':residual, 'proliferation':proliferation, 'diffusion':diffusion, 'phiut':phi*u_t}
-
-    
+        
 
     def pde2dgeo(self, xr):
         t = xr[:,0:1]
