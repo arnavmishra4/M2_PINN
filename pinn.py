@@ -203,18 +203,15 @@ class PINNSolver():
         grad_stat = {}
         grad_by_loss = {}
         if self.losses.weighting.method in {"grad","invd"}:
-            # compute gradient for each loss
             for loss_name in loss.keys():
                 grad_by_loss = tape.gradient(loss[loss_name], glob_trainable_variables)
                 flattened_tensors = [tf.reshape(tensor, [-1]) for tensor in grad_by_loss]
                 concatenated_tensor = tf.concat(flattened_tensors, axis=0)
-
                 stat = {}
-                stat['mean'] =  tf.reduce_mean(tf.abs(concatenated_tensor))
+                stat['mean'] = tf.reduce_mean(tf.abs(concatenated_tensor))
                 stat['max'] = tf.reduce_max(tf.abs(concatenated_tensor))
                 stat['std'] = tf.math.reduce_std(concatenated_tensor)
                 grad_stat[loss_name] = stat
-
         del tape
         return loss, g, grad_by_loss, grad_stat
     
