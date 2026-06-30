@@ -327,12 +327,12 @@ class Gmodel:
         'th2': tf.Variable(opts['initparam']['th2'],   trainable=opts.get('trainth2'),dtype = DTYPE,name="th2"),
         'kadc': tf.Variable(opts['initparam']['kadc'],   trainable=opts.get('trainkadc'),dtype = DTYPE,name="kadc"),
         }
-
-        self.ix = [[self.param['x0'],self.param['y0']]]
-
+        
+        self.ix = tf.reshape(tf.stack([self.param['x0'], self.param['y0']]), [1, 2])
+        
         if self.xdim == 3:
             self.param['z0'] = tf.Variable(opts['initparam']['z0'], trainable=opts.get('trainx0'),dtype = DTYPE,name="z0")
-            self.ix = [[self.param['x0'],self.param['y0'],self.param['z0']]]
+            self.ix = tf.reshape(tf.stack([self.param['x0'], self.param['y0'], self.param['z0']]), [1, 3])
 
         
         
